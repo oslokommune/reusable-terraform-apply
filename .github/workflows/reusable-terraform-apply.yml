@@ -53,7 +53,7 @@ jobs:
 
       - name: Determine stacks to deploy
         id: determine
-        uses: oslokommune/composite-actions/determine-stacks@prepare-for-focus-group
+        uses: oslokommune/composite-actions/determine-stacks@c4abc960b37045adb14eee42952a345607e5d39d # determine-stacks-v1.1.1
         with:
           selected-stacks: ${{ inputs.selected-stacks }}
           ignored-stacks: ${{ inputs.ignored-stacks }}
@@ -112,7 +112,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@prepare-for-focus-group # v1.2.0
+        uses: oslokommune/composite-actions/terraform-deploy@c4abc960b37045adb14eee42952a345607e5d39d # terraform-deploy-v1.3.1
         with:
           # TODO: finne bedre navn? "environment" er ofte brukt i GA for github environments.
           environment: "dev"
@@ -162,7 +162,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@prepare-for-focus-group # v1.2.0
+        uses: oslokommune/composite-actions/terraform-deploy@c4abc960b37045adb14eee42952a345607e5d39d # terraform-deploy-v1.3.1
         with:
           environment: "dev"
           stack-dir: ${{ matrix.stack }}
@@ -210,7 +210,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@prepare-for-focus-group # v1.2.0
+        uses: oslokommune/composite-actions/terraform-deploy@c4abc960b37045adb14eee42952a345607e5d39d # terraform-deploy-v1.3.1
         with:
           environment: "prod"
           stack-dir: ${{ matrix.stack }}
@@ -259,7 +259,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@prepare-for-focus-group # v1.2.0
+        uses: oslokommune/composite-actions/terraform-deploy@c4abc960b37045adb14eee42952a345607e5d39d # terraform-deploy-v1.3.1
         with:
           environment: "prod"
           stack-dir: ${{ matrix.stack }}
