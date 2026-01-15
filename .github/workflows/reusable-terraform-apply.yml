@@ -1,9 +1,5 @@
 name: "Terraform apply"
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: false
-
 on:
   workflow_call:
     inputs:
@@ -93,7 +89,7 @@ jobs:
         stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.dev-core-stacks) }}
     runs-on: ubuntu-24.04
     permissions:
-      actions: write
+      actions: read
       contents: read
       id-token: write
       pull-requests: write
@@ -114,11 +110,23 @@ jobs:
           echo "$config"
           echo "result=$config" >> "$GITHUB_OUTPUT"
 
+      - name: Detect stale job
+        # NOTE: We only check on push events to default branch as this is the only place where production deployments happen.
+        # Probably OK to ignore workflow reruns as it requires explicit user action.
+        if: ${{ github.event_name == 'push' && github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+        id: detect-stale-job
+        # TODO: Pin after initial release
+        uses: oslokommune/composite-actions/detect-stale-job@stale-job-stuff
+        with:
+          cancel-if-stale: false
+
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@c4abc960b37045adb14eee42952a345607e5d39d # terraform-deploy-v1.3.1
+        uses: oslokommune/composite-actions/terraform-deploy@stale-job-stuff
+        if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
         with:
           # TODO: finne bedre navn? "environment" er ofte brukt i GA for github environments.
+          cancel-if-stale: false
           environment: "dev"
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
@@ -143,7 +151,7 @@ jobs:
         stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.dev-apps-stacks) }}
     runs-on: ubuntu-24.04
     permissions:
-      actions: write
+      actions: read
       contents: read
       id-token: write
       pull-requests: write
@@ -164,10 +172,22 @@ jobs:
           echo "$config"
           echo "result=$config" >> "$GITHUB_OUTPUT"
 
+      - name: Detect stale job
+        # NOTE: We only check on push events to default branch as this is the only place where production deployments happen.
+        # Probably OK to ignore workflow reruns as it requires explicit user action.
+        if: ${{ github.event_name == 'push' && github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+        id: detect-stale-job
+        # TODO: Pin after initial release
+        uses: oslokommune/composite-actions/detect-stale-job@stale-job-stuff
+        with:
+          cancel-if-stale: false
+
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@c4abc960b37045adb14eee42952a345607e5d39d # terraform-deploy-v1.3.1
+        uses: oslokommune/composite-actions/terraform-deploy@stale-job-stuff
+        if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
         with:
+          cancel-if-stale: false
           environment: "dev"
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
@@ -191,7 +211,7 @@ jobs:
         stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.prod-core-stacks) }}
     runs-on: ubuntu-24.04
     permissions:
-      actions: write
+      actions: read
       contents: read
       id-token: write
       pull-requests: write
@@ -212,10 +232,22 @@ jobs:
           echo "$config"
           echo "result=$config" >> "$GITHUB_OUTPUT"
 
+      - name: Detect stale job
+        # NOTE: We only check on push events to default branch as this is the only place where production deployments happen.
+        # Probably OK to ignore workflow reruns as it requires explicit user action.
+        if: ${{ github.event_name == 'push' && github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+        id: detect-stale-job
+        # TODO: Pin after initial release
+        uses: oslokommune/composite-actions/detect-stale-job@stale-job-stuff
+        with:
+          cancel-if-stale: false
+
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@c4abc960b37045adb14eee42952a345607e5d39d # terraform-deploy-v1.3.1
+        uses: oslokommune/composite-actions/terraform-deploy@stale-job-stuff
+        if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
         with:
+          cancel-if-stale: false
           environment: "prod"
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
@@ -240,7 +272,7 @@ jobs:
         stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.prod-apps-stacks) }}
     runs-on: ubuntu-24.04
     permissions:
-      actions: write
+      actions: read
       contents: read
       id-token: write
       pull-requests: write
@@ -261,10 +293,22 @@ jobs:
           echo "$config"
           echo "result=$config" >> "$GITHUB_OUTPUT"
 
+      - name: Detect stale job
+        # NOTE: We only check on push events to default branch as this is the only place where production deployments happen.
+        # Probably OK to ignore workflow reruns as it requires explicit user action.
+        if: ${{ github.event_name == 'push' && github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+        id: detect-stale-job
+        # TODO: Pin after initial release
+        uses: oslokommune/composite-actions/detect-stale-job@stale-job-stuff
+        with:
+          cancel-if-stale: false
+
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@c4abc960b37045adb14eee42952a345607e5d39d # terraform-deploy-v1.3.1
+        uses: oslokommune/composite-actions/terraform-deploy@stale-job-stuff
+        if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
         with:
+          cancel-if-stale: false
           environment: "prod"
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
