@@ -1,0 +1,267 @@
+name: "Terraform apply"
+
+on:
+  workflow_call:
+    inputs:
+      config-file:
+        description: "Path to CI/CD configuration file"
+        type: string
+        default: ".gp.cicd.json"
+        required: false
+      selected-stacks:
+        type: string
+        default: ""
+        description: 'Comma/newline-delimited list of stack patterns to deploy (e.g., "stacks/dev/{dns,iam}","stacks/dev/app-hello,stacks/prod/app-hello"). By default, only stacks with changed files are deployed. Set "selected-stacks" to override this behavior.'
+        required: false
+      ignored-stacks:
+        type: string
+        description: "Comma/newline-delimited list of stack patterns to always ignore."
+        default: ""
+        required: false
+      core-stacks:
+        type: string
+        description: "Comma/newline-delimited list of patterns of stacks that should deploy before other stacks to handle dependencies. If 'override-core-stacks' is true, these will replace the default core stack patterns."
+        default: ""
+        required: false
+      override-core-stacks:
+        type: boolean
+        description: "If true, replace the default core stack patterns with those provided in 'core-stacks' input. By default, 'core-stacks' is appended to a predefined list of patterns."
+        default: false
+        required: false
+    secrets:
+      ssh-private-key:
+        description: "A deploy key that grants read access to Terraform modules in golden-path-iac"
+        required: true
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -euo pipefail {0}
+
+jobs:
+  determine-which-stacks-to-deploy:
+    name: "Determine stacks to deploy"
+    runs-on: ubuntu-24.04
+    outputs:
+      dev-core-stacks: ${{ steps.determine.outputs.dev-core-stacks }}
+      dev-apps-stacks: ${{ steps.determine.outputs.dev-apps-stacks }}
+      prod-core-stacks: ${{ steps.determine.outputs.prod-core-stacks }}
+      prod-apps-stacks: ${{ steps.determine.outputs.prod-apps-stacks }}
+    steps:
+      # Checkout code to access the local composite action and config
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Determine stacks to deploy
+        id: determine
+        uses: oslokommune/composite-actions/determine-stacks@prepare-for-focus-group
+        with:
+          selected-stacks: ${{ inputs.selected-stacks }}
+          ignored-stacks: ${{ inputs.ignored-stacks }}
+          core-stacks: ${{ inputs.core-stacks }}
+          override-core-stacks: ${{ inputs.override-core-stacks }}
+
+      - name: Add redeploy comment
+        if: ${{ fromJSON(steps.determine.outputs.all-stacks)[0] }}
+        env:
+          SELECTED_STACKS: ${{ join(fromJSON(steps.determine.outputs.all-stacks), ',') }}
+          PARTIAL_WORKFLOW_DISPATCH_URL: "${{ github.server_url}}/${{ github.repository }}/actions/workflows"
+        run: |
+          # $GITHUB_WORKFLOW_REF looks like this: <org>/<repo>/.github/workflows/<workflow-filename>@<git-reference>
+          workflow_filename="$(basename "${GITHUB_WORKFLOW_REF%%@*}")"
+          workflow_dispatch_url="$PARTIAL_WORKFLOW_DISPATCH_URL/$workflow_filename"
+          {
+            echo "To redeploy the stacks used in this workflow, run a [workflow dispatch]($workflow_dispatch_url) using this pattern:"
+            echo '```'
+            echo "$SELECTED_STACKS"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-dev-core:
+    name: "Deploy dev (core)"
+    if: >-
+      fromJSON(needs.determine-which-stacks-to-deploy.outputs.dev-core-stacks)[0]
+    needs:
+      - determine-which-stacks-to-deploy
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.dev-core-stacks) }}
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
+      pull-requests: write
+      statuses: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.stack }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Store config as output
+        id: config
+        env:
+          CONFIG_FILE: ${{ inputs.config-file }}
+        run: |
+          config="$(jq -e -c . "$CONFIG_FILE")"
+          echo "$config"
+          echo "result=$config" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy
+        id: deploy
+        uses: oslokommune/composite-actions/terraform-deploy@prepare-for-focus-group # v1.2.0
+        with:
+          # TODO: finne bedre navn? "environment" er ofte brukt i GA for github environments.
+          environment: "dev"
+          stack-dir: ${{ matrix.stack }}
+          config: ${{ steps.config.outputs.result }}
+          github-deploy-key: ${{ secrets.ssh-private-key }}
+          # TODO: Create new GitHub app, create org wide secret for allowing app repos
+          # to check out infra repo
+          #github-app-id: ${{ secrets.KJOREMILJO_TERRAFORM_APPLYER_APP_ID }}
+          #github-app-private-key: ${{ secrets.KJOREMILJO_TERRAFORM_APPLYER_PRIVATE_KEY }}
+
+  deploy-dev-apps:
+    name: "Deploy dev (apps)"
+    if: >-
+      !cancelled() &&
+      fromJSON(needs.determine-which-stacks-to-deploy.outputs.dev-apps-stacks)[0] &&
+      (needs.deploy-dev-core.result == 'success' || needs.deploy-dev-core.result == 'skipped')
+    needs:
+      - determine-which-stacks-to-deploy
+      - deploy-dev-core
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.dev-apps-stacks) }}
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
+      pull-requests: write
+      statuses: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.stack }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Store config as output
+        id: config
+        env:
+          CONFIG_FILE: ${{ inputs.config-file }}
+        run: |
+          config="$(jq -e -c . "$CONFIG_FILE")"
+          echo "$config"
+          echo "result=$config" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy
+        id: deploy
+        uses: oslokommune/composite-actions/terraform-deploy@prepare-for-focus-group # v1.2.0
+        with:
+          environment: "dev"
+          stack-dir: ${{ matrix.stack }}
+          config: ${{ steps.config.outputs.result }}
+          github-deploy-key: ${{ secrets.ssh-private-key }}
+
+  deploy-prod-core:
+    name: "Deploy prod (core)"
+    needs:
+      - determine-which-stacks-to-deploy
+      - deploy-dev-core
+      - deploy-dev-apps
+    if: >-
+      !cancelled() &&
+      fromJSON(needs.determine-which-stacks-to-deploy.outputs.prod-core-stacks)[0] &&
+      (needs.deploy-dev-core.result == 'success' || needs.deploy-dev-core.result == 'skipped') &&
+      (needs.deploy-dev-apps.result == 'success' || needs.deploy-dev-apps.result == 'skipped')
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.prod-core-stacks) }}
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
+      pull-requests: write
+      statuses: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.stack }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Store config as output
+        id: config
+        env:
+          CONFIG_FILE: ${{ inputs.config-file }}
+        run: |
+          config="$(jq -e -c . "$CONFIG_FILE")"
+          echo "$config"
+          echo "result=$config" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy
+        id: deploy
+        uses: oslokommune/composite-actions/terraform-deploy@prepare-for-focus-group # v1.2.0
+        with:
+          environment: "prod"
+          stack-dir: ${{ matrix.stack }}
+          config: ${{ steps.config.outputs.result }}
+          github-deploy-key: ${{ secrets.ssh-private-key }}
+
+  deploy-prod-apps:
+    name: "Deploy prod (apps)"
+    needs:
+      - determine-which-stacks-to-deploy
+      - deploy-dev-core
+      - deploy-dev-apps
+      - deploy-prod-core
+    if: >-
+      !cancelled() &&
+      fromJSON(needs.determine-which-stacks-to-deploy.outputs.prod-apps-stacks)[0] &&
+      (needs.deploy-dev-core.result == 'success' || needs.deploy-dev-core.result == 'skipped') &&
+      (needs.deploy-dev-apps.result == 'success' || needs.deploy-dev-apps.result == 'skipped') &&
+      (needs.deploy-prod-core.result == 'success' || needs.deploy-prod-core.result == 'skipped')
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.prod-apps-stacks) }}
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
+      pull-requests: write
+      statuses: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.stack }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Store config as output
+        id: config
+        env:
+          CONFIG_FILE: ${{ inputs.config-file }}
+        run: |
+          config="$(jq -e -c . "$CONFIG_FILE")"
+          echo "$config"
+          echo "result=$config" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy
+        id: deploy
+        uses: oslokommune/composite-actions/terraform-deploy@prepare-for-focus-group # v1.2.0
+        with:
+          environment: "prod"
+          stack-dir: ${{ matrix.stack }}
+          config: ${{ steps.config.outputs.result }}
+          github-deploy-key: ${{ secrets.ssh-private-key }}
