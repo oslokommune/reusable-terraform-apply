@@ -111,30 +111,28 @@ jobs:
           echo "result=$config" >> "$GITHUB_OUTPUT"
 
       - name: Detect stale job
-        # NOTE: We only check on push events to default branch as this is the only place where production deployments happen.
-        # Probably OK to ignore workflow reruns as it requires explicit user action.
-        if: ${{ github.event_name == 'push' && github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+        # NOTE: We only check on default branch as this is the only place where production deployments happen.
+        # Ignoring workflow reruns as it requires explicit user action.
+        if: ${{ github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
         id: detect-stale-job
-        # TODO: Pin after initial release
-        uses: oslokommune/composite-actions/detect-stale-job@stale-job-stuff
+        uses: oslokommune/composite-actions/detect-stale-job@dda43bd11d1da1f9c9901bb82f152059c009ba49 # detect-stale-job-v1.0.1
         with:
           cancel-if-stale: false
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@stale-job-stuff
+        uses: oslokommune/composite-actions/terraform-deploy@19c914aa4ae44b0e27a7b819ffca4710ea10316c # terraform-deploy-v1.3.3
+        # We skip deployment if job is stale instead of cancelling it, as cancellation would
+        # stop the entire workflow - potentially not deploying other stacks that have had their
+        # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
         if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
         with:
-          # TODO: finne bedre navn? "environment" er ofte brukt i GA for github environments.
           cancel-if-stale: false
+          # TODO: Find a better name for this? "environment" is also a GitHub Actions concept.
           environment: "dev"
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
           github-deploy-key: ${{ secrets.ssh-private-key }}
-          # TODO: Create new GitHub app, create org wide secret for allowing app repos
-          # to check out infra repo
-          #github-app-id: ${{ secrets.KJOREMILJO_TERRAFORM_APPLYER_APP_ID }}
-          #github-app-private-key: ${{ secrets.KJOREMILJO_TERRAFORM_APPLYER_PRIVATE_KEY }}
 
   deploy-dev-apps:
     name: "Deploy dev (apps)"
@@ -173,18 +171,20 @@ jobs:
           echo "result=$config" >> "$GITHUB_OUTPUT"
 
       - name: Detect stale job
-        # NOTE: We only check on push events to default branch as this is the only place where production deployments happen.
-        # Probably OK to ignore workflow reruns as it requires explicit user action.
-        if: ${{ github.event_name == 'push' && github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+        # NOTE: We only check on default branch as this is the only place where production deployments happen.
+        # Ignoring workflow reruns as it requires explicit user action.
+        if: ${{ github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
         id: detect-stale-job
-        # TODO: Pin after initial release
-        uses: oslokommune/composite-actions/detect-stale-job@stale-job-stuff
+        uses: oslokommune/composite-actions/detect-stale-job@dda43bd11d1da1f9c9901bb82f152059c009ba49 # detect-stale-job-v1.0.1
         with:
           cancel-if-stale: false
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@stale-job-stuff
+        uses: oslokommune/composite-actions/terraform-deploy@19c914aa4ae44b0e27a7b819ffca4710ea10316c # terraform-deploy-v1.3.3
+        # We skip deployment if job is stale instead of cancelling it, as cancellation would
+        # stop the entire workflow - potentially not deploying other stacks that have had their
+        # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
         if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
         with:
           cancel-if-stale: false
@@ -233,18 +233,20 @@ jobs:
           echo "result=$config" >> "$GITHUB_OUTPUT"
 
       - name: Detect stale job
-        # NOTE: We only check on push events to default branch as this is the only place where production deployments happen.
-        # Probably OK to ignore workflow reruns as it requires explicit user action.
-        if: ${{ github.event_name == 'push' && github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+        # NOTE: We only check on default branch as this is the only place where production deployments happen.
+        # Ignoring workflow reruns as it requires explicit user action.
+        if: ${{ github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
         id: detect-stale-job
-        # TODO: Pin after initial release
-        uses: oslokommune/composite-actions/detect-stale-job@stale-job-stuff
+        uses: oslokommune/composite-actions/detect-stale-job@dda43bd11d1da1f9c9901bb82f152059c009ba49 # detect-stale-job-v1.0.1
         with:
           cancel-if-stale: false
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@stale-job-stuff
+        uses: oslokommune/composite-actions/terraform-deploy@19c914aa4ae44b0e27a7b819ffca4710ea10316c # terraform-deploy-v1.3.3
+        # We skip deployment if job is stale instead of cancelling it, as cancellation would
+        # stop the entire workflow - potentially not deploying other stacks that have had their
+        # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
         if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
         with:
           cancel-if-stale: false
@@ -294,18 +296,20 @@ jobs:
           echo "result=$config" >> "$GITHUB_OUTPUT"
 
       - name: Detect stale job
-        # NOTE: We only check on push events to default branch as this is the only place where production deployments happen.
-        # Probably OK to ignore workflow reruns as it requires explicit user action.
-        if: ${{ github.event_name == 'push' && github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+        # NOTE: We only check on default branch as this is the only place where production deployments happen.
+        # Ignoring workflow reruns as it requires explicit user action.
+        if: ${{ github.run_attempt == 1 && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
         id: detect-stale-job
-        # TODO: Pin after initial release
-        uses: oslokommune/composite-actions/detect-stale-job@stale-job-stuff
+        uses: oslokommune/composite-actions/detect-stale-job@dda43bd11d1da1f9c9901bb82f152059c009ba49 # detect-stale-job-v1.0.1
         with:
           cancel-if-stale: false
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@stale-job-stuff
+        uses: oslokommune/composite-actions/terraform-deploy@19c914aa4ae44b0e27a7b819ffca4710ea10316c # terraform-deploy-v1.3.3
+        # We skip deployment if job is stale instead of cancelling it, as cancellation would
+        # stop the entire workflow - potentially not deploying other stacks that have had their
+        # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
         if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
         with:
           cancel-if-stale: false
