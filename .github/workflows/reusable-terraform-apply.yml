@@ -125,7 +125,7 @@ jobs:
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
-        if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
+        if: ${{ steps.detect-stale-job.outputs.is-stale != 'true' }}
         with:
           cancel-if-stale: false
           # TODO: Find a better name for this? "environment" is also a GitHub Actions concept.
@@ -185,7 +185,7 @@ jobs:
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
-        if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
+        if: ${{ steps.detect-stale-job.outputs.is-stale != 'true' }}
         with:
           cancel-if-stale: false
           environment: "dev"
@@ -247,7 +247,7 @@ jobs:
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
-        if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
+        if: ${{ steps.detect-stale-job.outputs.is-stale != 'true' }}
         with:
           cancel-if-stale: false
           environment: "prod"
@@ -310,7 +310,7 @@ jobs:
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
-        if: ${{ ! steps.detect-stale-job.outputs.is-stale }}
+        if: ${{ steps.detect-stale-job.outputs.is-stale != 'true' }}
         with:
           cancel-if-stale: false
           environment: "prod"
