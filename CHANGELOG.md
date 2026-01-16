@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.0.1...v1.0.2) (2026-01-16)
+
+
+### Bug Fixes
+
+* handle composite action output as string ([#4](https://github.com/oslokommune/reusable-terraform-apply/issues/4)) ([590b771](https://github.com/oslokommune/reusable-terraform-apply/commit/590b7710d9c988b309f2060cc988f9697c990b10))
+
 ## [1.0.1](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.0.0...v1.0.1) (2026-01-16)
 
 
