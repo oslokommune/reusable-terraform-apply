@@ -254,6 +254,7 @@ jobs:
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
           github-deploy-key: ${{ secrets.ssh-private-key }}
+          datadog-api-key: ${{ secrets.DD_API_KEY }}
 
   deploy-prod-apps:
     name: "Deploy prod (apps)"
