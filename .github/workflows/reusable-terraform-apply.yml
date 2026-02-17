@@ -32,6 +32,9 @@ on:
       ssh-private-key:
         description: "A deploy key that grants read access to Terraform modules in golden-path-iac"
         required: true
+      datadog-api-key:
+        description: "Datadog API key for sending deployment events"
+        required: false
 
 defaults:
   run:
@@ -53,7 +56,7 @@ jobs:
 
       - name: Determine stacks to deploy
         id: determine
-        uses: oslokommune/composite-actions/determine-stacks@c4abc960b37045adb14eee42952a345607e5d39d # determine-stacks-v1.1.1
+        uses: oslokommune/composite-actions/determine-stacks@e4a52c90b079620c92e671cd9a71381765a6850f # determine-stacks-v1.1.2
         with:
           selected-stacks: ${{ inputs.selected-stacks }}
           ignored-stacks: ${{ inputs.ignored-stacks }}
@@ -121,7 +124,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@19c914aa4ae44b0e27a7b819ffca4710ea10316c # terraform-deploy-v1.3.3
+        uses: oslokommune/composite-actions/terraform-deploy@223d2fb543b9edd1bbf6f9ca6d9d797bd57e82a3 # terraform-deploy-v1.6.0
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -133,6 +136,7 @@ jobs:
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
           github-deploy-key: ${{ secrets.ssh-private-key }}
+          datadog-api-key: ${{ secrets.datadog-api-key }}
 
   deploy-dev-apps:
     name: "Deploy dev (apps)"
@@ -181,7 +185,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@19c914aa4ae44b0e27a7b819ffca4710ea10316c # terraform-deploy-v1.3.3
+        uses: oslokommune/composite-actions/terraform-deploy@223d2fb543b9edd1bbf6f9ca6d9d797bd57e82a3 # terraform-deploy-v1.6.0
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -192,6 +196,7 @@ jobs:
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
           github-deploy-key: ${{ secrets.ssh-private-key }}
+          datadog-api-key: ${{ secrets.datadog-api-key }}
 
   deploy-prod-core:
     name: "Deploy prod (core)"
@@ -243,7 +248,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@19c914aa4ae44b0e27a7b819ffca4710ea10316c # terraform-deploy-v1.3.3
+        uses: oslokommune/composite-actions/terraform-deploy@223d2fb543b9edd1bbf6f9ca6d9d797bd57e82a3 # terraform-deploy-v1.6.0
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -254,6 +259,7 @@ jobs:
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
           github-deploy-key: ${{ secrets.ssh-private-key }}
+          datadog-api-key: ${{ secrets.datadog-api-key }}
 
   deploy-prod-apps:
     name: "Deploy prod (apps)"
@@ -306,7 +312,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@19c914aa4ae44b0e27a7b819ffca4710ea10316c # terraform-deploy-v1.3.3
+        uses: oslokommune/composite-actions/terraform-deploy@223d2fb543b9edd1bbf6f9ca6d9d797bd57e82a3 # terraform-deploy-v1.6.0
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -317,3 +323,4 @@ jobs:
           stack-dir: ${{ matrix.stack }}
           config: ${{ steps.config.outputs.result }}
           github-deploy-key: ${{ secrets.ssh-private-key }}
+          datadog-api-key: ${{ secrets.datadog-api-key }}
