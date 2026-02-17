@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.0.2...v1.1.0) (2026-02-17)
+
+
+### Features
+
+* send optional metric to datadog ([#6](https://github.com/oslokommune/reusable-terraform-apply/issues/6)) ([2763b31](https://github.com/oslokommune/reusable-terraform-apply/commit/2763b31e4b472ee4bf5a170d1b12912052db2ce7))
+
 ## [1.0.2](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.0.1...v1.0.2) (2026-01-16)
 
 
