@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.1.0...v1.1.1) (2026-03-04)
+
+
+### Bug Fixes
+
+* update determine-stacks to v1.1.4 ([#11](https://github.com/oslokommune/reusable-terraform-apply/issues/11)) ([efaedbc](https://github.com/oslokommune/reusable-terraform-apply/commit/efaedbcfe53a8f18910eaf29c450a5e3602e63c9))
+
 ## [1.1.0](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.0.2...v1.1.0) (2026-02-17)
 
 
