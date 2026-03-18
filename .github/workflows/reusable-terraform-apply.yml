@@ -87,7 +87,8 @@ jobs:
       - determine-which-stacks-to-deploy
     strategy:
       max-parallel: 1
-      fail-fast: false
+      # Stop on first failure — safe because max-parallel: 1 means no job is mid-apply when cancelled.
+      fail-fast: true
       matrix:
         stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.dev-core-stacks) }}
     runs-on: ubuntu-24.04
@@ -211,7 +212,8 @@ jobs:
       (needs.deploy-dev-apps.result == 'success' || needs.deploy-dev-apps.result == 'skipped')
     strategy:
       max-parallel: 1
-      fail-fast: false
+      # Stop on first failure — safe because max-parallel: 1 means no job is mid-apply when cancelled.
+      fail-fast: true
       matrix:
         stack: ${{ fromJSON(needs.determine-which-stacks-to-deploy.outputs.prod-core-stacks) }}
     runs-on: ubuntu-24.04
