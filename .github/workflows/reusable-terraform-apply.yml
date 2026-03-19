@@ -60,6 +60,7 @@ jobs:
         with:
           selected-stacks: ${{ inputs.selected-stacks }}
           ignored-stacks: ${{ inputs.ignored-stacks }}
+          core-stacks: ${{ null }}
           additional-core-stacks: ${{ inputs.core-stacks }}
 
       - name: Add redeploy comment
