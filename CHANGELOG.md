@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.2](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.1.1...v1.1.2) (2026-03-19)
+
+
+### Bug Fixes
+
+* incorrect ordering of core stacks ([#15](https://github.com/oslokommune/reusable-terraform-apply/issues/15)) ([c552aad](https://github.com/oslokommune/reusable-terraform-apply/commit/c552aadf8675c4c3642fefcd5e7679c137f8b945))
+* stop deploying remaining core stacks after a failure ([#13](https://github.com/oslokommune/reusable-terraform-apply/issues/13)) ([4e9176f](https://github.com/oslokommune/reusable-terraform-apply/commit/4e9176f3de6681399a9115c624cb7ededcdfe89f))
+
 ## [1.1.1](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.1.0...v1.1.1) (2026-03-04)
 
 
