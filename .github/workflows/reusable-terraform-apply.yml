@@ -20,7 +20,7 @@ on:
         required: false
       core-stacks:
         type: string
-        description: "Comma/newline-delimited list of core stack patterns. Overrides the built-in defaults. Set to empty string to disable core stack classification."
+        description: "Comma/newline-delimited list of core stack patterns. Set to empty string to disable core stack classification."
         default: "__default__"
         required: false
       additional-core-stacks:
@@ -56,7 +56,7 @@ jobs:
 
       - name: Determine stacks to deploy
         id: determine
-        uses: oslokommune/composite-actions/determine-stacks@245921c7054f8578cc0af1fc3b735c90f808397b # fix/determine-stacks-core-default
+        uses: oslokommune/composite-actions/determine-stacks@9a741809809645ca40db41897995721dd9941334 # determine-stacks-v1.2.1
         with:
           selected-stacks: ${{ inputs.selected-stacks }}
           ignored-stacks: ${{ inputs.ignored-stacks }}
@@ -125,7 +125,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@223d2fb543b9edd1bbf6f9ca6d9d797bd57e82a3 # terraform-deploy-v1.6.0
+        uses: oslokommune/composite-actions/terraform-deploy@9a741809809645ca40db41897995721dd9941334 # terraform-deploy-v1.6.1
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -186,7 +186,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@223d2fb543b9edd1bbf6f9ca6d9d797bd57e82a3 # terraform-deploy-v1.6.0
+        uses: oslokommune/composite-actions/terraform-deploy@9a741809809645ca40db41897995721dd9941334 # terraform-deploy-v1.6.1
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -250,7 +250,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@223d2fb543b9edd1bbf6f9ca6d9d797bd57e82a3 # terraform-deploy-v1.6.0
+        uses: oslokommune/composite-actions/terraform-deploy@9a741809809645ca40db41897995721dd9941334 # terraform-deploy-v1.6.1
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -314,7 +314,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@223d2fb543b9edd1bbf6f9ca6d9d797bd57e82a3 # terraform-deploy-v1.6.0
+        uses: oslokommune/composite-actions/terraform-deploy@9a741809809645ca40db41897995721dd9941334 # terraform-deploy-v1.6.1
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
