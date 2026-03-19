@@ -60,8 +60,8 @@ jobs:
         with:
           selected-stacks: ${{ inputs.selected-stacks }}
           ignored-stacks: ${{ inputs.ignored-stacks }}
-          core-stacks: ${{ inputs.core-stacks }}
-          override-core-stacks: ${{ inputs.override-core-stacks }}
+          core-stacks: ${{ inputs.override-core-stacks && inputs.core-stacks || '' }}
+          additional-core-stacks: ${{ !inputs.override-core-stacks && inputs.core-stacks || '' }}
 
       - name: Add redeploy comment
         if: ${{ fromJSON(steps.determine.outputs.all-stacks)[0] }}
