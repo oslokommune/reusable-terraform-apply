@@ -21,6 +21,8 @@ on:
       core-stacks:
         type: string
         description: "Comma/newline-delimited list of core stack patterns. Set to empty string to disable core stack classification."
+        # This is a bit of a workaround because in composite-actions/determine-stacks we're not able to distinguish
+        # between an unset value and an empty string, so we don't know if the default value should apply or not.
         default: "__default__"
         required: false
       additional-core-stacks:
