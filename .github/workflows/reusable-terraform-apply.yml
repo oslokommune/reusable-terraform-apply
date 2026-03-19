@@ -20,13 +20,11 @@ on:
         required: false
       core-stacks:
         type: string
-        description: "Comma/newline-delimited list of patterns of stacks that should deploy before other stacks to handle dependencies. If 'override-core-stacks' is true, these will replace the default core stack patterns."
-        default: ""
+        description: ""
         required: false
-      override-core-stacks:
-        type: boolean
-        description: "If true, replace the default core stack patterns with those provided in 'core-stacks' input. By default, 'core-stacks' is appended to a predefined list of patterns."
-        default: false
+      additional-core-stacks:
+        type: string
+        description: ""
         required: false
     secrets:
       ssh-private-key:
@@ -60,8 +58,8 @@ jobs:
         with:
           selected-stacks: ${{ inputs.selected-stacks }}
           ignored-stacks: ${{ inputs.ignored-stacks }}
-          core-stacks: ${{ null }}
-          additional-core-stacks: ${{ inputs.core-stacks }}
+          core-stacks: ${{ inputs.core-stacks }}
+          additional-core-stacks: ${{ inputs.additional-core-stacks }}
 
       - name: Add redeploy comment
         if: ${{ fromJSON(steps.determine.outputs.all-stacks)[0] }}
