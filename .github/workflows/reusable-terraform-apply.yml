@@ -20,11 +20,13 @@ on:
         required: false
       core-stacks:
         type: string
-        description: ""
+        description: "Comma/newline-delimited list of core stack patterns. Overrides the built-in defaults. Set to empty string to disable core stack classification."
+        default: "__default__"
         required: false
       additional-core-stacks:
         type: string
-        description: ""
+        description: "Comma/newline-delimited list of stack patterns to append to the core stacks list."
+        default: ""
         required: false
     secrets:
       ssh-private-key:
@@ -54,7 +56,7 @@ jobs:
 
       - name: Determine stacks to deploy
         id: determine
-        uses: oslokommune/composite-actions/determine-stacks@2b4c3279c1e21d9c25e5f98a59a70d72b52bf8d9 # main
+        uses: oslokommune/composite-actions/determine-stacks@245921c7054f8578cc0af1fc3b735c90f808397b # fix/determine-stacks-core-default
         with:
           selected-stacks: ${{ inputs.selected-stacks }}
           ignored-stacks: ${{ inputs.ignored-stacks }}
