@@ -56,7 +56,7 @@ jobs:
 
       - name: Determine stacks to deploy
         id: determine
-        uses: oslokommune/composite-actions/determine-stacks@f4c5d5d181abc4b0af2eaa816369d7deb2a04807 # determine-stacks-v1.1.4
+        uses: oslokommune/composite-actions/determine-stacks@2b4c3279c1e21d9c25e5f98a59a70d72b52bf8d9 # main
         with:
           selected-stacks: ${{ inputs.selected-stacks }}
           ignored-stacks: ${{ inputs.ignored-stacks }}
