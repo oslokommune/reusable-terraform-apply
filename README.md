@@ -2,6 +2,16 @@
 
 Reusable GitHub Actions workflow for applying Terraform stacks.
 
+## Inputs
+
+| Input                  | Type    | Default         | Description                                                                                                                                                                                                                         |
+|------------------------|---------|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `config-file`          | string  | `.gp.cicd.json` | Path to CI/CD configuration file.                                                                                                                                                                                                   |
+| `selected-stacks`      | string  | `""`            | Comma/newline-delimited list of stack patterns to deploy (e.g., `stacks/dev/{dns,iam}`, `stacks/dev/app-hello,stacks/prod/app-hello`). By default, only stacks with changed files are deployed. Set this to override that behavior. |
+| `ignored-stacks`       | string  | `""`            | Comma/newline-delimited list of stack patterns to always ignore.                                                                                                                                                                    |
+| `core-stacks`          | string  | `""`            | Comma/newline-delimited list of patterns of stacks that should deploy before other stacks to handle dependencies. If `override-core-stacks` is true, these replace the default core stack patterns.                                 |
+| `override-core-stacks` | boolean | `false`         | If true, replace the default core stack patterns with those provided in `core-stacks`. By default, `core-stacks` is appended to a predefined list of patterns.                                                                      |
+
 ## Usage
 
 ```yaml
