@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.1.2...v1.1.3) (2026-04-20)
+
+
+### Bug Fixes
+
+* **deps:** bump actions to support Node.js 24 ([#17](https://github.com/oslokommune/reusable-terraform-apply/issues/17)) ([fddaba2](https://github.com/oslokommune/reusable-terraform-apply/commit/fddaba2d911736895cbf653c752c3e7d5f04c0ee))
+
 ## [1.1.2](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.1.1...v1.1.2) (2026-03-19)
 
 
