@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.1.3...v1.1.4) (2026-04-30)
+
+
+### Dependency Updates
+
+* update oslokommune/composite-actions action to terraform-deploy-v1.7.2 ([#20](https://github.com/oslokommune/reusable-terraform-apply/issues/20)) ([973adc3](https://github.com/oslokommune/reusable-terraform-apply/commit/973adc3c10f97a055831ff66d970709223f1e68c))
+
 ## [1.1.3](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.1.2...v1.1.3) (2026-04-20)
 
 
