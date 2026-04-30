@@ -127,7 +127,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@a050629d84616b1428f802f674a2fd41c3e8b68a # terraform-deploy-v1.7.1
+        uses: oslokommune/composite-actions/terraform-deploy@501034aa67f2ed141130ff0b4f1add9e78566903 # terraform-deploy-v1.7.2
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -188,7 +188,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@a050629d84616b1428f802f674a2fd41c3e8b68a # terraform-deploy-v1.7.1
+        uses: oslokommune/composite-actions/terraform-deploy@501034aa67f2ed141130ff0b4f1add9e78566903 # terraform-deploy-v1.7.2
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -252,7 +252,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@a050629d84616b1428f802f674a2fd41c3e8b68a # terraform-deploy-v1.7.1
+        uses: oslokommune/composite-actions/terraform-deploy@501034aa67f2ed141130ff0b4f1add9e78566903 # terraform-deploy-v1.7.2
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -316,7 +316,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: oslokommune/composite-actions/terraform-deploy@a050629d84616b1428f802f674a2fd41c3e8b68a # terraform-deploy-v1.7.1
+        uses: oslokommune/composite-actions/terraform-deploy@501034aa67f2ed141130ff0b4f1add9e78566903 # terraform-deploy-v1.7.2
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
