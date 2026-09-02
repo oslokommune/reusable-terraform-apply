@@ -127,10 +127,10 @@ jobs:
 
       - name: Deploy
         id: deploy
-        # TODO: This digest is the tip of the branch in oslokommune/composite-actions#276, not a
-        # release. Repoint it to the next terraform-deploy release once #275 and #276 have merged
-        # and been released, otherwise the ref is left dangling by the squash merge.
-        uses: oslokommune/composite-actions/terraform-deploy@1e376d8cb54d95b61bdfda1df101a1079426e5ae
+        # TODO: This ref is the branch in oslokommune/composite-actions#276, not a release.
+        # Repoint it to the next terraform-deploy release's digest once #275 and #276 have
+        # merged and been released, otherwise the branch is deleted by the squash merge.
+        uses: oslokommune/composite-actions/terraform-deploy@feat/rewire-terraform-deploy-to-resolver
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -191,10 +191,10 @@ jobs:
 
       - name: Deploy
         id: deploy
-        # TODO: This digest is the tip of the branch in oslokommune/composite-actions#276, not a
-        # release. Repoint it to the next terraform-deploy release once #275 and #276 have merged
-        # and been released, otherwise the ref is left dangling by the squash merge.
-        uses: oslokommune/composite-actions/terraform-deploy@1e376d8cb54d95b61bdfda1df101a1079426e5ae
+        # TODO: This ref is the branch in oslokommune/composite-actions#276, not a release.
+        # Repoint it to the next terraform-deploy release's digest once #275 and #276 have
+        # merged and been released, otherwise the branch is deleted by the squash merge.
+        uses: oslokommune/composite-actions/terraform-deploy@feat/rewire-terraform-deploy-to-resolver
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -258,10 +258,10 @@ jobs:
 
       - name: Deploy
         id: deploy
-        # TODO: This digest is the tip of the branch in oslokommune/composite-actions#276, not a
-        # release. Repoint it to the next terraform-deploy release once #275 and #276 have merged
-        # and been released, otherwise the ref is left dangling by the squash merge.
-        uses: oslokommune/composite-actions/terraform-deploy@1e376d8cb54d95b61bdfda1df101a1079426e5ae
+        # TODO: This ref is the branch in oslokommune/composite-actions#276, not a release.
+        # Repoint it to the next terraform-deploy release's digest once #275 and #276 have
+        # merged and been released, otherwise the branch is deleted by the squash merge.
+        uses: oslokommune/composite-actions/terraform-deploy@feat/rewire-terraform-deploy-to-resolver
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -325,10 +325,10 @@ jobs:
 
       - name: Deploy
         id: deploy
-        # TODO: This digest is the tip of the branch in oslokommune/composite-actions#276, not a
-        # release. Repoint it to the next terraform-deploy release once #275 and #276 have merged
-        # and been released, otherwise the ref is left dangling by the squash merge.
-        uses: oslokommune/composite-actions/terraform-deploy@1e376d8cb54d95b61bdfda1df101a1079426e5ae
+        # TODO: This ref is the branch in oslokommune/composite-actions#276, not a release.
+        # Repoint it to the next terraform-deploy release's digest once #275 and #276 have
+        # merged and been released, otherwise the branch is deleted by the squash merge.
+        uses: oslokommune/composite-actions/terraform-deploy@feat/rewire-terraform-deploy-to-resolver
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
