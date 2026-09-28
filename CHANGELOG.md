@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.5](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.1.4...v1.1.5) (2026-09-28)
+
+
+### Dependency Updates
+
+* update internal github actions ([#22](https://github.com/oslokommune/reusable-terraform-apply/issues/22)) ([3480103](https://github.com/oslokommune/reusable-terraform-apply/commit/34801035d14a6e86ca49a9d6c321b7feaadf75f9))
+
 ## [1.1.4](https://github.com/oslokommune/reusable-terraform-apply/compare/v1.1.3...v1.1.4) (2026-04-30)
 
 
