@@ -129,7 +129,7 @@ jobs:
         id: deploy
         # TODO: This digest is the head of oslokommune/composite-actions#292, not a release.
         # Repoint it to the next terraform-deploy release before merging.
-        uses: oslokommune/composite-actions/terraform-deploy@4f9ce70c94e2066099d4c388b6561fffc3464522
+        uses: oslokommune/composite-actions/terraform-deploy@5e6c1edcd8aa5874e69aa26bb9b296819903174e
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -192,7 +192,7 @@ jobs:
         id: deploy
         # TODO: This digest is the head of oslokommune/composite-actions#292, not a release.
         # Repoint it to the next terraform-deploy release before merging.
-        uses: oslokommune/composite-actions/terraform-deploy@4f9ce70c94e2066099d4c388b6561fffc3464522
+        uses: oslokommune/composite-actions/terraform-deploy@5e6c1edcd8aa5874e69aa26bb9b296819903174e
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -258,7 +258,7 @@ jobs:
         id: deploy
         # TODO: This digest is the head of oslokommune/composite-actions#292, not a release.
         # Repoint it to the next terraform-deploy release before merging.
-        uses: oslokommune/composite-actions/terraform-deploy@4f9ce70c94e2066099d4c388b6561fffc3464522
+        uses: oslokommune/composite-actions/terraform-deploy@5e6c1edcd8aa5874e69aa26bb9b296819903174e
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
@@ -324,7 +324,7 @@ jobs:
         id: deploy
         # TODO: This digest is the head of oslokommune/composite-actions#292, not a release.
         # Repoint it to the next terraform-deploy release before merging.
-        uses: oslokommune/composite-actions/terraform-deploy@4f9ce70c94e2066099d4c388b6561fffc3464522
+        uses: oslokommune/composite-actions/terraform-deploy@5e6c1edcd8aa5874e69aa26bb9b296819903174e
         # We skip deployment if job is stale instead of cancelling it, as cancellation would
         # stop the entire workflow - potentially not deploying other stacks that have had their
         # files changed. Also, we don't want to risk cancelling jobs that are mid-apply.
